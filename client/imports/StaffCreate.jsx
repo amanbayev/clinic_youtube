@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import Select2 from 'react-select2-wrapper'
+import Select from 'react-select';
+
+// Be sure to include styles at some point, probably during your bootstrapping
+import 'react-select/dist/react-select.css';
 
 export default class StaffCreate extends Component {
   constructor(props) {
@@ -7,7 +10,8 @@ export default class StaffCreate extends Component {
     this.state = {
       first_name: '',
       last_name: '',
-      department: ''
+      department: '',
+      deptId: ''
     }
   }
   handleStaffSubmit(e) {
@@ -25,7 +29,7 @@ export default class StaffCreate extends Component {
       } else {
         Bert.alert({
           title: 'Staff added',
-          message: newStaff.firstName + ' ' + newStaff.lastName + ' has been added to Staff!',
+          message: newStaff.first_name + ' ' + newStaff.last_name + ' has been added to Staff!',
           type: 'info',
           style: 'growl-top-right',
           icon: 'fa-users'
@@ -35,6 +39,10 @@ export default class StaffCreate extends Component {
     this.props.handler()
   }
   render() {
+    let depts = this.props.departments.map((dept,index)=>{
+      return { 'label': dept.name, 'value':dept._id }
+    })
+
     return (
       <div className="row">
         <div className="col">
@@ -52,6 +60,13 @@ export default class StaffCreate extends Component {
                   <label>Last name</label>
                   <input type="text" className="form-control" value={this.state.last_name}
                     onChange={(e)=>{e.preventDefault(); this.setState({last_name: e.target.value})}}/>
+                </div>
+                <div className="form-group">
+                  <Select
+                    options={depts}
+                    value={this.state.deptId}
+                    onChange={(e)=>{ this.setState({department: e.label, deptId: e.value})}}
+                    />
                 </div>
                 <div className="btn-group">
                   <button type="submit" className="btn btn-primary">Save</button>

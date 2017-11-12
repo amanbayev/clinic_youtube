@@ -25,7 +25,7 @@ if ( Meteor.isServer ) {
        newDepartment.createdBy = Meteor.userId()
        newDepartment.counter = 0
        newDepartment.active = true
-       newDepartment.staff = {}
+       newDepartment.staff = []
        return DepartmentsCollection.insert(newDepartment)
     },
     'departments.addStaff': function(deptId, staffId) {
