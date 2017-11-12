@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Select2 from 'react-select2-wrapper'
 
 export default class StaffCreate extends Component {
   constructor(props) {
