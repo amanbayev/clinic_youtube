@@ -13,10 +13,10 @@ export default class Sidebar extends Component {
             <NavLink className="nav-link" to="/admin/departments">Departments</NavLink>
           </li>
           <li className="nav-item">
-            <NavLink exact className="nav-link" to="/admin/staff">Staff</NavLink>
+            <NavLink exact className="nav-link" to="/admin/positions">Positions</NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">Export</a>
+            <NavLink exact className="nav-link" to="/admin/staff">Staff</NavLink>
           </li>
         </ul>
         <ul className="nav nav-pills flex-column">

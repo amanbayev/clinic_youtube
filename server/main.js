@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import '/imports/api/StaffCollection'
 import '/imports/api/DepartmentsCollection'
+import '/imports/api/PositionsCollection'
 
 Meteor.startup(() => {
   // code to run on server at startup

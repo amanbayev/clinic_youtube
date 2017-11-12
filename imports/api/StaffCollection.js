@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo'
 import { DepartmentsCollection } from '/imports/api/DepartmentsCollection'
+import { PositionsCollection } from '/imports/api/PositionsCollection'
 
 export const StaffCollection = new Mongo.Collection("StaffCollection")
 
@@ -27,6 +28,11 @@ if ( Meteor.isServer ) {
        newStaff.active = true
        let staffId = StaffCollection.insert(newStaff)
        DepartmentsCollection.update({_id: newStaff.deptId},
+         {
+           $inc: { counter: 1 },
+           $push: { staff: staffId }
+       })
+       PositionsCollection.update({_id: newStaff.posId},
          {
            $inc: { counter: 1 },
            $push: { staff: staffId }

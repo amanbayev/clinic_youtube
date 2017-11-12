@@ -11,7 +11,9 @@ export default class StaffCreate extends Component {
       first_name: '',
       last_name: '',
       department: '',
-      deptId: ''
+      deptId: '',
+      position: '',
+      posId: ''
     }
   }
   handleStaffSubmit(e) {
@@ -42,6 +44,9 @@ export default class StaffCreate extends Component {
     let depts = this.props.departments.map((dept,index)=>{
       return { 'label': dept.name, 'value':dept._id }
     })
+    let pos = this.props.positions.map((pos, index)=>{
+      return { 'label': pos.name, 'value': pos._id }
+    })
 
     return (
       <div className="row">
@@ -66,6 +71,13 @@ export default class StaffCreate extends Component {
                     options={depts}
                     value={this.state.deptId}
                     onChange={(e)=>{ this.setState({department: e.label, deptId: e.value})}}
+                    />
+                </div>
+                <div className="form-group">
+                  <Select
+                    options={pos}
+                    value={this.state.posId}
+                    onChange={(e)=>{ this.setState({position: e.label, posId: e.value})}}
                     />
                 </div>
                 <div className="btn-group">

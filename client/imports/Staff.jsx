@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { StaffCollection } from '/imports/api/StaffCollection'
 import { DepartmentsCollection } from '/imports/api/DepartmentsCollection'
+import { PositionsCollection } from '/imports/api/PositionsCollection'
 
 import StaffCreate from '/client/imports/StaffCreate'
 
@@ -40,7 +41,10 @@ class Staff extends Component {
         <button className="btn btn-primary" onClick={(e)=>{e.preventDefault(); this.setState({isCreatingStaff:true})}}>Add staff member <i className="fa fa-plus"></i></button>
       )
     } else {
-      return <StaffCreate handler={this.toggleCreateState} departments={this.props.departments} />
+      return <StaffCreate
+        handler     = { this.toggleCreateState }
+        positions   = { this.props.positions   }
+        departments = { this.props.departments } />
     }
   }
 
@@ -76,12 +80,14 @@ class Staff extends Component {
 export default withTracker(props => {
   const staffSubscription = Meteor.subscribe("StaffCollection")
   const deptSubscription = Meteor.subscribe("DepartmentsCollection")
-  const allReady = staffSubscription.ready() && deptSubscription.ready()
+  const posSubscription = Meteor.subscribe('PositionsCollection')
+  const allReady = staffSubscription.ready() && deptSubscription.ready() && posSubscription.ready()
   const loading = staffSubscription ? !allReady : true
 
   return {
     loading,
     staff: StaffCollection.find().fetch(),
-    departments: DepartmentsCollection.find().fetch()
+    departments: DepartmentsCollection.find().fetch(),
+    positions: PositionsCollection.find().fetch()
   }
 })(Staff)
