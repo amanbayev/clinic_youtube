@@ -9,8 +9,11 @@
     "bcrypt": "^1.0.3",
     "jquery": "^3.2.1",
     "meteor-node-stubs": "^0.3.2",
+    "moment": "^2.19.2",
     "react": "^16.1.0",
     "react-addons-pure-render-mixin": "^15.6.2",
+    "react-big-calendar": "^0.17.0",
+    "react-datepicker": "^0.60.2",
     "react-dom": "^16.1.0",
     "react-router-dom": "^4.2.2",
     "react-select": "^1.0.0-rc.10"
