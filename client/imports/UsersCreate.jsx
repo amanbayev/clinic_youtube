@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { Creatable } from 'react-select'
+import 'react-select/dist/react-select.css'
 
 export default class UsersCreate extends Component {
   constructor(props) {
@@ -11,61 +13,67 @@ export default class UsersCreate extends Component {
       password: '',
       confirmPassword: '',
       email: '',
-      roles: ['client']
+      roles: []
     }
   }
   handleUsersSubmit(e) {
     e.preventDefault()
-    if (this.state.password === this.state.confirmPassword) {
-      let newUser = {
-        username: this.state.username,
-        email: this.state.email,
-        password: this.state.password,
-        first_name: this.state.first_name,
-        last_name: this.state.last_name,
-        clinic: this.state.clinic,
-        roles: this.state.roles
+
+      if (this.state.password === this.state.confirmPassword) {
+        let newUser = {
+          username: this.state.username,
+          email: this.state.email,
+          password: this.state.password,
+          first_name: this.state.first_name,
+          last_name: this.state.last_name,
+          clinic: this.state.clinic,
+          roles: this.state.roles
+        }
+
+        Meteor.call("users.add", newUser, function(error){
+          if(error){
+            Bert.alert({
+              title: 'Error',
+              message: error.reason,
+              type: 'danger',
+              style: 'growl-top-right',
+              icon: 'fa-times'
+            });
+          } else {
+            Bert.alert({
+              title: 'User added',
+              message: newUser.first_name + ' ' + newUser.last_name + ' has been added to Users!',
+              type: 'info',
+              style: 'growl-top-right',
+              icon: 'fa-users'
+            });
+          }
+        });
+        this.props.handler()
+      } else {
+        $('#createUserCard').animateCss('shake');
+        Bert.alert({
+          title: 'Error',
+          message: 'Passwords do not match!',
+          type: 'danger',
+          style: 'growl-top-right',
+          icon: 'fa-times'
+        });
       }
 
-      Meteor.call("users.add", newUser, function(error){
-        if(error){
-          Bert.alert({
-            title: 'Error',
-            message: error.reason,
-            type: 'danger',
-            style: 'growl-top-right',
-            icon: 'fa-times'
-          });
-        } else {
-          Bert.alert({
-            title: 'User added',
-            message: newUser.first_name + ' ' + newUser.last_name + ' has been added to Users!',
-            type: 'info',
-            style: 'growl-top-right',
-            icon: 'fa-users'
-          });
-        }
-      });
-      this.props.handler()
-    } else {
-      Bert.alert({
-        title: 'Error',
-        message: 'Passwords do not match!',
-        type: 'danger',
-        style: 'growl-top-right',
-        icon: 'fa-times'
-      });
-    }
   }
   render() {
+    let roles = this.props.roles.map((role,index)=>{
+      return { 'label': role.name, 'value':role.name }
+    })
     return (
       <div className="row">
         <div className="col-12">
-          <div className="card">
+          <div className="card" id="createUserCard">
             <div className="card-body">
               <h4 className="card-title">Add new user</h4>
               <h6 className="card-subtitle mb-2 text-muted">Please fill in the form and click Save</h6>
-              <form onSubmit={this.handleUsersSubmit.bind(this)}>
+              <form onSubmit={this.handleUsersSubmit.bind(this)} >
                 <div className="row">
                   <div className="col">
                     <div className="form-group">
@@ -85,6 +93,20 @@ export default class UsersCreate extends Component {
                       <input type="password" className="form-control" value={this.state.password}
                         onChange={(e)=>{e.preventDefault(); this.setState({password: e.target.value})}}
                         tabIndex={5} />
+                    </div>
+                    <div className="form-group">
+                      <label>Roles</label>
+                      <Creatable
+                        hint="Enter a value that's NOT in the list, then hit return"
+                        label="Custom tag creation"
+                        options={roles}
+                        value={this.state.roles}
+                        multi={true}
+                        onChange={(e)=>{
+                          this.setState({
+                            roles:e
+                          })}}
+                        />
                     </div>
                   </div>
                   <div className="col">
@@ -109,8 +131,8 @@ export default class UsersCreate extends Component {
                   </div>
                 </div>
                 <div className="btn-group">
-                  <button type="submit" className="btn btn-primary" tabIndex={7} >Save</button>
-                  <button className="btn btn-secondary" onClick={this.props.handler}>Cancel</button>
+                  <button type="submit" className="btn btn-primary" tabIndex={8} >Save</button>
+                  <button className="btn btn-secondary" onClick={this.props.handler} tabIndex={9}>Cancel</button>
                 </div>
               </form>
             </div>

@@ -21,7 +21,9 @@ class Users extends Component {
         <th scope="row">{index + 1}</th>
         <td>{user.profile.first_name}</td>
         <td>{user.profile.last_name}</td>
-        <td>{user.roles[0]}</td>
+        <td>{user.roles.map((role, index)=> (
+            <span key={index}><span className="badge badge-info">{role}</span>&nbsp;</span>
+        ))}</td>
       </tr>
     ))
   }
@@ -38,36 +40,44 @@ class Users extends Component {
         <button className="btn btn-primary" onClick={(e)=>{e.preventDefault(); this.setState({isCreatingUsers:true})}}>Add user <i className="fa fa-plus"></i></button>
       )
     } else {
-      return <UsersCreate handler={this.toggleCreateState} />
+      return <UsersCreate handler={this.toggleCreateState} roles={this.props.roles} />
     }
   }
 
   render() {
-    return (
-      <div role="main" className="col-sm-9 ml-sm-auto col-md-10 pt-3">
-        <h1>Users</h1>
-        <nav aria-label="breadcrumb" role="navigation">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item"><Link to="/admin">Dashboard</Link></li>
-            <li className="breadcrumb-item active" aria-current="page">Users</li>
-          </ol>
-        </nav>
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First name</th>
-              <th scope="col">Last name</th>
-              <th scope="col">Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderUsersTable()}
-          </tbody>
-        </table>
-        {this.renderCreateUsersArea()}
-      </div>
-    )
+    if (!this.props.loading) {
+      return (
+        <div role="main" className="col-sm-9 ml-sm-auto col-md-10 pt-3">
+          <h1>Users</h1>
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item"><Link to="/admin">Dashboard</Link></li>
+              <li className="breadcrumb-item active" aria-current="page">Users</li>
+            </ol>
+          </nav>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Roles</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.renderUsersTable()}
+            </tbody>
+          </table>
+          {this.renderCreateUsersArea()}
+        </div>
+      )
+    } else {
+      return (
+        <div className="col-sm-9 ml-sm-auto col-md-10 pt-3">
+          <span><i className="fa fa-spin"></i> Loading</span>
+        </div>
+      )
+    }
   }
 }
 
