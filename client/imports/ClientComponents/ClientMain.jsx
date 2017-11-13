@@ -5,9 +5,9 @@ import {
   Route,
   Switch
 } from 'react-router-dom'
-import ClientSubmenu from '/client/imports/ClientSubmenu'
+import ClientSubmenu from '/client/imports/ClientComponents/ClientSubmenu'
 import NotFound from '/client/imports/NotFound'
-import Appointments from '/client/imports/Appointments'
+import Appointments from '/client/imports/ClientComponents/Appointments'
 
 const ClientMain = props => (
   <div>

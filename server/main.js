@@ -4,6 +4,7 @@ import '/imports/api/StaffCollection'
 import '/imports/api/DepartmentsCollection'
 import '/imports/api/PositionsCollection'
 import '/imports/api/ClientsCardCollection'
+import '/imports/api/AppointmentsCollection'
 
 Meteor.startup(() => {
   Meteor.publish("UserStatus", function(){

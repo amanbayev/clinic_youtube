@@ -12,7 +12,7 @@ import Landing from '/client/imports/Landing'
 import AdminMain from '/client/imports/AdminMain'
 import Login from '/client/imports/Login'
 import NotFound from '/client/imports/NotFound'
-import ClientMain from '/client/imports/ClientMain'
+import ClientMain from '/client/imports/ClientComponents/ClientMain'
 
 const App = props => (
   <Router>
