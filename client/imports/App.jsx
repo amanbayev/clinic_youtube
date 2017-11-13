@@ -12,17 +12,17 @@ import Landing from '/client/imports/Landing'
 import AdminMain from '/client/imports/AdminMain'
 import Login from '/client/imports/Login'
 import NotFound from '/client/imports/NotFound'
+import ClientMain from '/client/imports/ClientMain'
 
 const App = props => (
   <Router>
-
-      <Switch>
-        <Route exact path="/" component={ Landing } />
-        <Route exact path="/login" component={ Login } {...props}/>
-        <Authenticated path="/admin" component={ AdminMain } {...props} />
-        <Route component={ NotFound } />
-      </Switch>
-
+    <Switch>
+      <Route exact path="/" component={ Landing } />
+      <Route exact path="/login" component={ Login } {...props}/>
+      <Authenticated adminOnly={false} path="/client" component={ ClientMain } {...props} />
+      <Authenticated adminOnly={true} path="/admin" component={ AdminMain } {...props} />
+      <Route component={ NotFound } />
+    </Switch>
   </Router>
 )
 
