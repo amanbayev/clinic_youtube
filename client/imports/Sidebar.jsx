@@ -21,7 +21,7 @@ export default class Sidebar extends Component {
         </ul>
         <ul className="nav nav-pills flex-column">
           <li className="nav-item">
-            <a className="nav-link" href="#">Nav item</a>
+            <NavLink exact className="nav-link" to="/admin/users">Users</NavLink>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="#">Nav item again</a>

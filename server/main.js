@@ -10,6 +10,10 @@ Meteor.startup(() => {
     return Meteor.users.find({})
   });
 
+  Meteor.publish("allRoles", function(){
+    return Meteor.roles.find({})
+  });
+
   if ( Meteor.users.find().count() === 0 ) {
     let cResult = Accounts.createUser({
         username: 'admin',
@@ -37,7 +41,9 @@ Meteor.startup(() => {
            clinic: newUser.clinic
          }
        });
-       Roles.addUsersToRoles(cResult, 'client')
+       for (var role in newUser.roles) {
+         Roles.addUsersToRoles(cResult, role)
+       }       
        return true;
     },
     'users.addRole':function(userId, newRole) {
