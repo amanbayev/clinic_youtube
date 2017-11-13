@@ -11,6 +11,8 @@ import Clients from '/client/imports/Clients'
 import Positions from '/client/imports/Positions'
 import ClientsCard from '/client/imports/ClientsCard'
 
+import { UserStatus } from 'meteor/mizzao:user-status'
+
 import {
   Route,
   Switch
@@ -20,7 +22,13 @@ export default class AdminMain extends Component {
   constructor(props) {
     super(props)
   }
+  componentWillUnmount() {
+    UserStatus.stopMonitor()
+  }
   componentDidMount() {
+
+    UserStatus.startMonitor({threshold: 30000, idleOnBlur: true})
+
     $.fn.extend({
       animateCss: function (animationName, callback) {
           var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';

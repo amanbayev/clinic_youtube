@@ -6,7 +6,9 @@ import '/imports/api/PositionsCollection'
 import '/imports/api/ClientsCardCollection'
 
 Meteor.startup(() => {
-  // code to run on server at startup
+  Meteor.publish("UserStatus", function(){
+    return UserStatus.connections.find()
+  });
   Meteor.publish("getClientsCard", function(username){
     return Meteor.users.find({username: username})
   });
