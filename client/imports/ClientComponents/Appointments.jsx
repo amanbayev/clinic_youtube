@@ -19,7 +19,8 @@ class Appointments extends Component {
       creatingAppointment: true,
       appointmentDate: moment(),
       events: [],
-      hasCustomEvents: false
+      hasCustomEvents: false,
+      clickedBookedEvent: false
     }
   }
   componentWillMount(){
@@ -28,12 +29,12 @@ class Appointments extends Component {
       'title': 'Booked',
       'start': new Date(2017,10,15,9,0,0),
       'isBooked': true,
-      'end': new Date(2017,10,15,10,0,0)
+      'end': new Date(2017,10,15,11,0,0)
     })
     localEvents.push({
       'title': 'Doctor Talgat',
       'start': new Date(2017,10,15,15,0,0),
-      'end': new Date(2017,10,15,16,0,0),
+      'end': new Date(2017,10,15,17,0,0),
       'isBooked': true,
       desc: 'Check up'
     })
@@ -45,12 +46,17 @@ class Appointments extends Component {
     })
   }
   pushEvent(slotInfo) {
+    console.log(slotInfo);
+    if (this.state.clickedBookedEvent) {
+      this.setState({clickedBookedEvent: false})
+      return true
+    }
     let event = {}
     event.title = 'My booking'
     event.start = slotInfo.start
     event.end = slotInfo.end
     let localEvents = this.state.events
-    
+
     if (this.state.hasCustomEvents)
       localEvents.pop()
     else
@@ -60,11 +66,26 @@ class Appointments extends Component {
   }
   eventPropGetter(event, start, end, isSelected) {
     let classForEvent = ''
-    if (event.isBooked) classForEvent += 'booked'
+    let styleForEvent = {}
+    if (event.isBooked) {
+      classForEvent += ' booked'
+      styleForEvent = {backgroundColor: '#c91f37'}
+    }
     let response = {
-      className: classForEvent
+      className: classForEvent,
+      style: styleForEvent
     }
     return response
+  }
+  bookedTimeslotClick(e) {
+    Bert.alert({
+      title: 'This time is taken',
+      message: 'Sorry, that timeslot is booked!',
+      type: 'info',
+      style: 'growl-top-right',
+      icon: 'fa-clock-o'
+    });
+    this.setState({bookedTimeslotClick: true})
   }
   renderCreateAppointmentArea() {
     if (this.state.creatingAppointment) {
@@ -117,16 +138,7 @@ class Appointments extends Component {
                         eventPropGetter={this.eventPropGetter.bind(this)}
                         toolbar={false}
                         selectable
-                        onSelectEvent={event => {
-                          Bert.alert({
-                            title: 'This time is taken',
-                            message: 'Sorry, that timeslot is booked!',
-                            type: 'info',
-                            style: 'growl-top-right',
-                            icon: 'fa-clock-o'
-                          });
-
-                        }}
+                        onSelectEvent={this.bookedTimeslotClick.bind(this)}
                         onSelectSlot={this.pushEvent.bind(this)}
                         timeslots={1}
                         defaultView='week'
