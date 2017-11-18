@@ -98,3 +98,9 @@ h1 {
   border-top-right-radius: 0;
 }
 /* Sign in styles END */
+
+/* React Big Calendar */
+.booked {
+  background-color: #c91f37;
+}
+/* end of React Big Calendar */

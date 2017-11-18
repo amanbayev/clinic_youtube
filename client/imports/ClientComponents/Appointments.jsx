@@ -27,12 +27,14 @@ class Appointments extends Component {
     localEvents.push({
       'title': 'Booked',
       'start': new Date(2017,10,15,9,0,0),
+      'isBooked': true,
       'end': new Date(2017,10,15,10,0,0)
     })
     localEvents.push({
       'title': 'Doctor Talgat',
       'start': new Date(2017,10,15,15,0,0),
       'end': new Date(2017,10,15,16,0,0),
+      'isBooked': true,
       desc: 'Check up'
     })
     this.setState({events: localEvents})
@@ -48,6 +50,7 @@ class Appointments extends Component {
     event.start = slotInfo.start
     event.end = slotInfo.end
     let localEvents = this.state.events
+    
     if (this.state.hasCustomEvents)
       localEvents.pop()
     else
@@ -55,10 +58,18 @@ class Appointments extends Component {
     localEvents.push(event)
     this.setState({events: localEvents})
   }
+  eventPropGetter(event, start, end, isSelected) {
+    let classForEvent = ''
+    if (event.isBooked) classForEvent += 'booked'
+    let response = {
+      className: classForEvent
+    }
+    return response
+  }
   renderCreateAppointmentArea() {
     if (this.state.creatingAppointment) {
-      let startDate = new Date(2017,10,11,9,0,0)
-      let endDate = new Date(2017,10,11,20,0,0)
+      let startDate = new Date(2017,16,11,9,0,0)
+      let endDate = new Date(2017,16,11,20,0,0)
 
       return (
         <div className="col">
@@ -103,7 +114,7 @@ class Appointments extends Component {
                         step={60}
                         date={this.state.appointmentDate.toDate()}
                         onNavigate={()=>{console.log('somehow navigated')}}
-
+                        eventPropGetter={this.eventPropGetter.bind(this)}
                         toolbar={false}
                         selectable
                         onSelectEvent={event => {
@@ -114,6 +125,7 @@ class Appointments extends Component {
                             style: 'growl-top-right',
                             icon: 'fa-clock-o'
                           });
+
                         }}
                         onSelectSlot={this.pushEvent.bind(this)}
                         timeslots={1}
