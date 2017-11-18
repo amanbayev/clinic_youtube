@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Header from '/client/imports/Header'
 
 import {
@@ -9,17 +9,30 @@ import ClientSubmenu from '/client/imports/ClientComponents/ClientSubmenu'
 import NotFound from '/client/imports/NotFound'
 import Appointments from '/client/imports/ClientComponents/Appointments'
 
-const ClientMain = props => (
-  <div>
-    <Header {...props}/>
-    <div className="container-fluid">
-      <ClientSubmenu { ...props }/>
-      <Switch>
-        <Route exact path="/client" component={ Appointments } />
-        <Route component={ NotFound } />
-      </Switch>
-    </div>
-  </div>
-)
+class ClientMain extends Component {
+  constructor(props) {
+    super(props)
+  }
+  componentWillUnmount() {
+    UserStatus.stopMonitor()
+  }
+  componentDidMount() {
+    UserStatus.startMonitor({threshold: 30000, idleOnBlur: true})
+  }
+  render(){
+    return (
+      <div>
+        <Header {...this.props}/>
+        <div className="container-fluid">
+          <ClientSubmenu { ...this.props }/>
+          <Switch>
+            <Route exact path="/client" component={ Appointments } />
+            <Route component={ NotFound } />
+          </Switch>
+        </div>
+      </div>
+    )
+  }
+}
 
 export default ClientMain
