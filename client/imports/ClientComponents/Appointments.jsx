@@ -46,7 +46,7 @@ class Appointments extends Component {
     })
   }
   pushEvent(slotInfo) {
-    console.log(slotInfo);
+
     if (this.state.clickedBookedEvent) {
       this.setState({clickedBookedEvent: false})
       return true
@@ -55,6 +55,7 @@ class Appointments extends Component {
     event.title = 'My booking'
     event.start = slotInfo.start
     event.end = slotInfo.end
+    this.setState({appointmentDate: moment(slotInfo.start)})
     let localEvents = this.state.events
 
     if (this.state.hasCustomEvents)
@@ -91,7 +92,8 @@ class Appointments extends Component {
     if (this.state.creatingAppointment) {
       let startDate = new Date(2017,16,11,9,0,0)
       let endDate = new Date(2017,16,11,20,0,0)
-
+      let eventTime = 'from ' + this.state.appointmentDate.format('HH:mm')
+      eventTime+= ' to ' + this.state.appointmentDate.add(1, 'hours').format('HH:mm')
       return (
         <div className="col">
           <div className="card">
@@ -105,7 +107,12 @@ class Appointments extends Component {
                   <div className="col-xs-12 col-md-3">
                     <div className="form-group">
                       <label>Reason for visit:</label>
-                      <textarea type="text" className="form-control"/>
+                      <textarea type="text" className="form-control" />
+                    </div>
+                    <div className="form-group">
+                      <label>Desired time (please pick in Calendar):</label>
+                      <input value={eventTime}
+                        type="text" className="form-control" readOnly={true}/>
                     </div>
                     <div className="form-group">
                       <label>Desired date:</label>
