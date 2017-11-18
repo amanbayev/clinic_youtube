@@ -20,7 +20,11 @@ class Appointments extends Component {
       appointmentDate: moment(),
       events: [],
       hasCustomEvents: false,
-      clickedBookedEvent: false
+      clickedBookedEvent: false,
+      reasonForVisit: '',
+      startDate: new Date(2017,16,11,9,0,0),
+      endDate: new Date(2017,16,11,20,0,0),
+      timeText: ''
     }
   }
   componentWillMount(){
@@ -41,6 +45,10 @@ class Appointments extends Component {
     this.setState({events: localEvents})
   }
   handleDateChange(newDate) {
+    let eventTime = 'from ' + this.state.appointmentDate.format('HH:mm')
+    let timeRef = this.state.appointmentDate
+    eventTime+= ' to ' + timeRef.add(1, 'hours').format('HH:mm')
+    this.setState({timeText: eventTime})
     this.setState({
       appointmentDate: newDate
     })
@@ -57,7 +65,10 @@ class Appointments extends Component {
     event.end = slotInfo.end
     this.setState({appointmentDate: moment(slotInfo.start)})
     let localEvents = this.state.events
-
+    let eventTime = 'from ' + this.state.appointmentDate.format('HH:mm')
+    let timeRef = this.state.appointmentDate
+    eventTime+= ' to ' + timeRef.add(1, 'hours').format('HH:mm')
+    this.setState({timeText: eventTime})
     if (this.state.hasCustomEvents)
       localEvents.pop()
     else
@@ -88,12 +99,16 @@ class Appointments extends Component {
     });
     this.setState({bookedTimeslotClick: true})
   }
+
+  handleAppointmentSubmit(e) {
+    e.preventDefault()
+    console.log(this.state);
+  }
+
   renderCreateAppointmentArea() {
     if (this.state.creatingAppointment) {
-      let startDate = new Date(2017,16,11,9,0,0)
-      let endDate = new Date(2017,16,11,20,0,0)
-      let eventTime = 'from ' + this.state.appointmentDate.format('HH:mm')
-      eventTime+= ' to ' + this.state.appointmentDate.add(1, 'hours').format('HH:mm')
+      // console.log(this.state.appointmentDate.format('dd MM YYYY HH:mm'))
+
       return (
         <div className="col">
           <div className="card">
@@ -102,16 +117,20 @@ class Appointments extends Component {
             </div>
             <div className="card-body">
               <h4 className="card-title">Please fill out this form</h4>
-              <form>
+              <form onSubmit={this.handleAppointmentSubmit.bind(this)}>
                 <div className="row">
                   <div className="col-xs-12 col-md-3">
                     <div className="form-group">
                       <label>Reason for visit:</label>
-                      <textarea type="text" className="form-control" />
+                      <textarea type="text" value={this.state.reasonForVisit}
+                      onChange={(e)=>{
+                        e.preventDefault();
+                        this.setState({reasonForVisit: e.target.value})
+                      }} className="form-control" />
                     </div>
                     <div className="form-group">
                       <label>Desired time (please pick in Calendar):</label>
-                      <input value={eventTime}
+                      <input value={this.state.timeText}
                         type="text" className="form-control" readOnly={true}/>
                     </div>
                     <div className="form-group">
@@ -133,8 +152,8 @@ class Appointments extends Component {
                       <label>Desired appointment date:</label>
                       <BigCalendar
                         events={this.state.events}
-                        min={startDate}
-                        max={endDate}
+                        min={this.state.startDate}
+                        max={this.state.endDate}
                         startAccessor='start'
                         defaultView='week'
                         views={['week']}
