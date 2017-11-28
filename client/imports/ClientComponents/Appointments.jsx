@@ -20,30 +20,36 @@ class Appointments extends Component {
       appointmentDate: moment(),
       events: [],
       hasCustomEvents: false,
-      clickedBookedEvent: false,
       reasonForVisit: '',
       startDate: new Date(2017,16,11,9,0,0),
       endDate: new Date(2017,16,11,20,0,0),
       timeText: ''
     }
   }
+
   componentWillMount(){
     let localEvents = this.state.events
-    localEvents.push({
+    let localStartTimes = []
+    let event1 = {
       'title': 'Booked',
-      'start': new Date(2017,10,15,9,0,0),
+      'start': new Date(2017,10,29,9,0,0),
       'isBooked': true,
-      'end': new Date(2017,10,15,11,0,0)
-    })
-    localEvents.push({
+      'end': new Date(2017,10,29,10,0,0)
+    }
+    let event2 = {
       'title': 'Doctor Talgat',
-      'start': new Date(2017,10,15,15,0,0),
-      'end': new Date(2017,10,15,17,0,0),
+      'start': new Date(2017,10,29,15,0,0),
+      'end': new Date(2017,10,29,16,0,0),
       'isBooked': true,
-      desc: 'Check up'
-    })
-    this.setState({events: localEvents})
+      'desc': 'Check up'
+    }
+    localEvents.push(event1)
+    localStartTimes.push(moment(event1.start).format('DD.MM.YYYY hh:mm'))
+    localEvents.push(event2)
+    localStartTimes.push(moment(event2.start).format('DD.MM.YYYY hh:mm'))
+    this.setState({events: localEvents, startTimes: localStartTimes})
   }
+
   handleDateChange(newDate) {
     let eventTime = 'from ' + this.state.appointmentDate.format('HH:mm')
     let timeRef = this.state.appointmentDate
@@ -53,10 +59,19 @@ class Appointments extends Component {
       appointmentDate: newDate
     })
   }
-  pushEvent(slotInfo) {
 
-    if (this.state.clickedBookedEvent) {
-      this.setState({clickedBookedEvent: false})
+  pushEvent(slotInfo) {
+    let clickedEvent = moment(slotInfo.start).format('DD.MM.YYYY hh:mm')
+    let localStartTimes = this.state.startTimes
+    let result = localStartTimes.indexOf(clickedEvent)
+    if (result != -1) {
+      Bert.alert({
+        title: 'This time is taken',
+        message: 'Sorry, that timeslot is booked!',
+        type: 'info',
+        style: 'growl-top-right',
+        icon: 'fa-clock-o'
+      });
       return true
     }
     let event = {}
@@ -76,6 +91,7 @@ class Appointments extends Component {
     localEvents.push(event)
     this.setState({events: localEvents})
   }
+
   eventPropGetter(event, start, end, isSelected) {
     let classForEvent = ''
     let styleForEvent = {}
@@ -89,6 +105,7 @@ class Appointments extends Component {
     }
     return response
   }
+
   bookedTimeslotClick(e) {
     Bert.alert({
       title: 'This time is taken',
@@ -97,12 +114,13 @@ class Appointments extends Component {
       style: 'growl-top-right',
       icon: 'fa-clock-o'
     });
-    this.setState({bookedTimeslotClick: true})
   }
 
   handleAppointmentSubmit(e) {
     e.preventDefault()
-    console.log(this.state);
+    console.log('Reason for visit: '+this.state.reasonForVisit);
+    let appDate = this.state.appointmentDate
+    console.log(moment(appDate).subtract({hours: 1}).format('DD.MM.YYYY hh:mm'))
   }
 
   renderCreateAppointmentArea() {
@@ -191,6 +209,7 @@ class Appointments extends Component {
       )
     }
   }
+
   render() {
     return (
       <div className="row">
