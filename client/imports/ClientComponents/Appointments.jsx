@@ -18,7 +18,9 @@ class Appointments extends Component {
     this.state = {
       creatingAppointment: true,
       appointmentDate: moment(),
-      events: [],
+      eventsInitialized: false,
+      events: this.props.appointments,
+      localStartTimes: [],
       hasCustomEvents: false,
       reasonForVisit: '',
       startDate: new Date(2017,16,11,9,0,0),
@@ -27,27 +29,16 @@ class Appointments extends Component {
     }
   }
 
-  componentWillMount(){
-    let localEvents = this.state.events
-    let localStartTimes = []
-    let event1 = {
-      'title': 'Booked',
-      'start': new Date(2017,10,29,9,0,0),
-      'isBooked': true,
-      'end': new Date(2017,10,29,10,0,0)
+  componentWillUpdate() {
+    if (!this.state.eventsInitialized) {
+      let events = this.props.appointments
+      let localStartTimes = []
+
+      events.map((event, index)=>{
+        localStartTimes.push(moment(event.start).format('DD.MM.YYYY hh:mm'))
+      })
+      this.setState({events, eventsInitialized: true, localStartTimes})
     }
-    let event2 = {
-      'title': 'Doctor Talgat',
-      'start': new Date(2017,10,29,15,0,0),
-      'end': new Date(2017,10,29,16,0,0),
-      'isBooked': true,
-      'desc': 'Check up'
-    }
-    localEvents.push(event1)
-    localStartTimes.push(moment(event1.start).format('DD.MM.YYYY hh:mm'))
-    localEvents.push(event2)
-    localStartTimes.push(moment(event2.start).format('DD.MM.YYYY hh:mm'))
-    this.setState({events: localEvents, startTimes: localStartTimes})
   }
 
   handleDateChange(newDate) {
@@ -62,7 +53,7 @@ class Appointments extends Component {
 
   pushEvent(slotInfo) {
     let clickedEvent = moment(slotInfo.start).format('DD.MM.YYYY hh:mm')
-    let localStartTimes = this.state.startTimes
+    let localStartTimes = this.state.localStartTimes
     let result = localStartTimes.indexOf(clickedEvent)
     if (result != -1) {
       Bert.alert({
@@ -97,8 +88,19 @@ class Appointments extends Component {
     let styleForEvent = {}
     if (event.isBooked) {
       classForEvent += ' booked'
-      styleForEvent = {backgroundColor: '#c91f37'}
+      styleForEvent.backgroundColor = '#c91f37'
+    } else
+    if (event.approved == false) {
+      styleForEvent.backgroundColor = '#e67e22'
+    } else {
+      styleForEvent.backgroundColor = '#f39c12'
     }
+
+    if (event.authorId === this.props.user._id) {
+      styleForEvent.border = '2px dotted #2ecc71'
+      // styleForEvent.borderRadius = 5
+    }
+
     let response = {
       className: classForEvent,
       style: styleForEvent
@@ -118,15 +120,34 @@ class Appointments extends Component {
 
   handleAppointmentSubmit(e) {
     e.preventDefault()
-    console.log('Reason for visit: '+this.state.reasonForVisit);
+    // console.log('Reason for visit: '+this.state.reasonForVisit);
     let appDate = this.state.appointmentDate
-    console.log(moment(appDate).subtract({hours: 1}).format('DD.MM.YYYY hh:mm'))
+    // console.log(moment(appDate).subtract({hours: 1}).format('DD.MM.YYYY hh:mm'))
+    let newBookingEvent = {}
+    newBookingEvent.title = 'Requested'
+    newBookingEvent.start = moment(appDate).subtract({hours: 1}).toDate()
+    newBookingEvent.end = moment(appDate).toDate()
+    newBookingEvent.isBooked = false
+    newBookingEvent.reasonForVisit = this.state.reasonForVisit
+    newBookingEvent.authorId = this.props.user._id
+    Meteor.call('appointment.insert', newBookingEvent, function(error) {
+      if (error) {
+        console.log(error.reason)
+      } else {
+        Bert.alert({
+          title: 'Booking request sent!',
+          message: 'Your request has been sent to registrar!',
+          type: 'success',
+          style: 'growl-top-right',
+          icon: 'fa-clock-o'
+        });
+      }
+    })
+    this.setState({creatingAppointment: false, eventsInitialized: false})
   }
 
   renderCreateAppointmentArea() {
     if (this.state.creatingAppointment) {
-      // console.log(this.state.appointmentDate.format('dd MM YYYY HH:mm'))
-
       return (
         <div className="col">
           <div className="card">
@@ -194,7 +215,9 @@ class Appointments extends Component {
 
                 <div className="btn-group">
                   <button type="submit" className="btn btn-primary">Request booking</button>
-                  <button className="btn btn-secondary" onClick={(e)=>(this.setState({creatingAppointment: false}))}>Cancel</button>
+                  <button className="btn btn-secondary" onClick={(e)=>(this.setState({creatingAppointment: false,
+                    eventsInitialized: false
+                  }))}>Cancel</button>
                 </div>
               </form>
             </div>
@@ -204,19 +227,27 @@ class Appointments extends Component {
     } else {
       return (
         <div className="col-md-6">
-          <button className="btn btn-success" onClick={(e)=>(this.setState({creatingAppointment: true}))}>Request New Appointment</button>
+          <button className="btn btn-success" onClick={(e)=>(this.setState({
+            creatingAppointment: true
+          }))}>Request New Appointment</button>
         </div>
       )
     }
   }
 
   render() {
-    return (
-      <div className="row">
-        {this.renderCreateAppointmentArea()}
+    if (this.props.loading) {
+      return (
+        <div><h1>Loading</h1></div>
+      )
+    } else {
+      return (
+        <div className="row">
+          {this.renderCreateAppointmentArea()}
 
-      </div>
-    )
+        </div>
+      )
+    }
   }
 }
 
@@ -229,6 +260,7 @@ export default withTracker(props => {
 
   return {
     loading,
+    user,
     appointments: AppointmentsCollection.find().fetch()
   }
 })(Appointments)
