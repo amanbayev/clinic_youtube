@@ -143,7 +143,7 @@ class Appointments extends Component {
         });
       }
     })
-    this.setState({creatingAppointment: false, eventsInitialized: false})
+    this.setState({creatingAppointment: false, eventsInitialized: false, hasCustomEvents: false})
   }
 
   renderCreateAppointmentArea() {
