@@ -6,6 +6,9 @@ if ( Meteor.isServer ) {
   Meteor.publish("AppointmentsCollection", function(){
     return AppointmentsCollection.find()
   })
+  Meteor.publish("MyAppointments", function() {
+    return AppointmentsCollection.find({'authorId':Meteor.userId()})
+  })
 
   AppointmentsCollection.allow({
     insert: ()=>{return false},
