@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data'
 import { Link } from 'react-router-dom'
 
 import { PositionsCollection } from '/imports/api/PositionsCollection'
-import PositionsCreate from '/client/imports/PositionsCreate'
+import PositionsCreate from '/client/imports/AdminComponents/PositionsCreate'
 
 class Positions extends Component {
   constructor(props) {

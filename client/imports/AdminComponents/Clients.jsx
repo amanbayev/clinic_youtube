@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 
 import { Switch, Route } from 'react-router-dom'
-import AllClients from '/client/imports/AllClients'
-import SingleClient from '/client/imports/SingleClient'
+import AllClients from '/client/imports/AdminComponents/AllClients'
+import SingleClient from '/client/imports/AdminComponents/SingleClient'
 
 const Clients = props => (
   <Switch>

@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data'
 import { Link } from 'react-router-dom'
 
 import { DepartmentsCollection } from '/imports/api/DepartmentsCollection'
-import DepartmentsCreate from '/client/imports/DepartmentsCreate'
+import DepartmentsCreate from '/client/imports/AdminComponents/DepartmentsCreate'
 
 class Departments extends Component {
   constructor(props) {

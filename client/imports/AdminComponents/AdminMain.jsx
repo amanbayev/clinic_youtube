@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 
 import Header from '/client/imports/Header'
-import Dashboard from '/client/imports/Dashboard'
+import Dashboard from '/client/imports/AdminComponents/Dashboard'
 import NotFound from '/client/imports/NotFound'
-import Sidebar from '/client/imports/Sidebar'
-import Staff from '/client/imports/Staff'
-import Departments from '/client/imports/Departments'
-import Users from '/client/imports/Users'
-import Clients from '/client/imports/Clients'
-import Positions from '/client/imports/Positions'
-import ClientsCard from '/client/imports/ClientsCard'
+import Sidebar from '/client/imports/AdminComponents/Sidebar'
+import Staff from '/client/imports/AdminComponents/Staff'
+import Departments from '/client/imports/AdminComponents/Departments'
+import Users from '/client/imports/AdminComponents/Users'
+import Clients from '/client/imports/AdminComponents/Clients'
+import Positions from '/client/imports/AdminComponents/Positions'
+import ClientsCard from '/client/imports/AdminComponents/ClientsCard'
 
 import { UserStatus } from 'meteor/mizzao:user-status'
 

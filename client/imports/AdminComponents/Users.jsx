@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data'
 import { Link } from 'react-router-dom'
 import { UserStatus } from 'meteor/mizzao:user-status'
 
-import UsersCreate from '/client/imports/UsersCreate'
+import UsersCreate from '/client/imports/AdminComponents/UsersCreate'
 
 class Users extends Component {
   constructor(props) {

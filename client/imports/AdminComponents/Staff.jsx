@@ -7,7 +7,7 @@ import { StaffCollection } from '/imports/api/StaffCollection'
 import { DepartmentsCollection } from '/imports/api/DepartmentsCollection'
 import { PositionsCollection } from '/imports/api/PositionsCollection'
 
-import StaffCreate from '/client/imports/StaffCreate'
+import StaffCreate from '/client/imports/AdminComponents/StaffCreate'
 
 class Staff extends Component {
   constructor(props) {
