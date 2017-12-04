@@ -19,16 +19,15 @@ class Users extends Component {
     if (this.props.loading) return (<tr></tr>)
     let users = this.props.users
     return users.map((user, index) => {
-      let status = '';
-      if (!user.status) return (<tr key={index}></tr>)
-      if (user.status.online) {
-        if (user.status.idle) {
-          status = (<span className="badge badge-warning">Idle</span>)
-        } else {
-          status = (<span className="badge badge-success">Online</span>)
+      let status = (<span className="badge badge-secondary">Offline</span>)
+      if (user.status) {
+        if (user.status.online) {
+          if (user.status.idle) {
+            status = (<span className="badge badge-warning">Idle</span>)
+          } else {
+            status = (<span className="badge badge-success">Online</span>)
+          }
         }
-      } else {
-        status = (<span className="badge badge-secondary">Offline</span>)
       }
       return (
         <tr key={index}>
