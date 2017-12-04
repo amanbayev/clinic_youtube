@@ -26,20 +26,8 @@ export default class Sidebar extends Component {
           <li className="nav-item">
             <NavLink exact className="nav-link" to="/admin/clients">Clients</NavLink>
           </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">One more nav</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">Another nav item</a>
-          </li>
         </ul>
         <ul className="nav nav-pills flex-column">
-          <li className="nav-item">
-            <a className="nav-link" href="#">Nav item again</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">One more nav</a>
-          </li>
           <li className="nav-item">
             <a className="nav-link" href="#" onClick={(e)=>{e.preventDefault(); Meteor.logout()}}>Log out</a>
           </li>
